@@ -31,6 +31,7 @@ namespace Mission06_ht242.Controllers
         [HttpPost]
         public IActionResult Collection(movieEntry response)
         {
+            // update sqlite database
             _firstContext.Add(response);
             _firstContext.SaveChanges();
             return View("confirmation", response);
