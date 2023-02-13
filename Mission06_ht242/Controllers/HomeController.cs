@@ -31,10 +31,18 @@ namespace Mission06_ht242.Controllers
         [HttpPost]
         public IActionResult Collection(movieEntry response)
         {
-            // update sqlite database
-            _firstContext.Add(response);
-            _firstContext.SaveChanges();
-            return View("confirmation", response);
+            // update sqlite database if no error
+            if (ModelState.IsValid)
+            {
+                _firstContext.Add(response);
+                _firstContext.SaveChanges();
+                return View("confirmation", response);
+            }
+            else
+            {
+                return View();
+            }
+            
         }
 
         public IActionResult Podcast()
