@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "Movie List";
+}
+
+@model List<movieEntry>
+
+<br /><br />
+<h1 class="display-4">The Joel Hilton Film Collection</h1>
+<br /><br />
+
+<!-- table displays movies in sqlite database-->
+      <table class="table table-bordered table-striped">
+          <thead class="font-weight-bold">
+              <tr>
+                  <td>Category</td>
+                  <td>Title</td>
+                  <td>Year</td>
+                  <td>Director</td>
+                  <td>Rating</td>
+                  <td>Edited</td>
+                  <td>Lent To</td>
+                  <td>Notes</td>
+              </tr>
+          </thead>
+
+          <!-- dynamically displays info from database-->
+          <tbody>
+              @foreach (var x in Model)
+              {
+              <tr>
+                  <td>@x.Category.CategoryName</td>
+                  <td>@x.Title</td>
+                  <td>@x.Year</td>
+                  <td>@x.Director</td>
+                  <td>@x.Rating</td>
+                  <td>@x.Edited</td>
+                  <td>@x.LentTo</td>
+                  <td>@x.Notes</td>
+
+                  <!-- directs user to edit/delete views and sends the entry id-->
+                  <td><a asp-controller="Home" asp-action="Edit" asp-route-entryid="@x.EntryID">Edit</a></td>
+                  <td><a asp-controller="Home" asp-action="Delete" asp-route-entryid="@x.EntryID">Delete</a></td>
+              </tr>
+              }
+          </tbody>
+
+      </table>

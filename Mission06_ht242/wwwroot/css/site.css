@@ -5,7 +5,7 @@ body {
     color: #F2F4F8;
 }
 
-p, h1, h2, label, li {
+p, h1, h2, label, li, td, tr {
     color: #2A324B;
 }
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Mission06_ht242.Models;
 using System;
@@ -11,20 +12,20 @@ namespace Mission06_ht242.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        private MovieEntryContext _firstContext { get; set; }
+        private MovieEntryContext meContext { get; set; }
 
         //constructor
-        public HomeController(ILogger<HomeController> logger, MovieEntryContext someName)
+        public HomeController( MovieEntryContext someName)
         {
-            _logger = logger;
-            _firstContext = someName;
+            meContext = someName;
         }
 
         [HttpGet]
         public IActionResult Collection ()
         {
+            //Populate Category Dropdown
+            ViewBag.Categories = meContext.categories.ToList();
+
             return View();
         }
 
@@ -34,15 +35,16 @@ namespace Mission06_ht242.Controllers
             // update sqlite database if no error
             if (ModelState.IsValid)
             {
-                _firstContext.Add(response);
-                _firstContext.SaveChanges();
+                meContext.Add(response);
+                meContext.SaveChanges();
                 return View("confirmation", response);
             }
             else
             {
+                ViewBag.Categories = meContext.categories.ToList();
+
                 return View();
             }
-            
         }
 
         public IActionResult Podcast()
@@ -55,15 +57,51 @@ namespace Mission06_ht242.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult movieList()
         {
+            //Filter/sort table
+            var movies = meContext.entries
+                .Include(x => x.Category)
+                .OrderBy(x => x.Title)
+                .ToList();
+            return View(movies);
+        }
+
+        [HttpGet]
+        public IActionResult Edit (int entryid)
+        {
+            //Populate category Dropdown
+            ViewBag.Categories = meContext.categories.ToList();
+
+            //Use EntryId to pull info
+            var application = meContext.entries.Single(x => x.EntryID == entryid);
+
+            return View("Collection", application);
+        }
+
+        [HttpPost]
+        public IActionResult Edit (movieEntry ent)
+        {
+            meContext.Update(ent);
+            meContext.SaveChanges();
+
+            return RedirectToAction("movieList");
+        }
+
+        [HttpGet]
+        public IActionResult Delete(int entryid)
+        {
+            var entry = meContext.entries.Single(x => x.EntryID == entryid);
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpPost]
+        public IActionResult Delete(movieEntry ent)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            meContext.entries.Remove(ent);
+            meContext.SaveChanges();
+
+            return RedirectToAction("movieList");
         }
     }
 }

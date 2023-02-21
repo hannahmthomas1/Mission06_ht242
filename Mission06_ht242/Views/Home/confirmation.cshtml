@@ -3,10 +3,13 @@
 }
 
 @model Mission06_ht242.Models.movieEntry
-    <br /><br />
+<br />
+<br />
 <h1 class="display-4">New Movie Successfully Submitted</h1>
 <br />
 <br />
 
 <!--Confirmation with specific movie title in the response-->
 <p>Thank you for contributing '@Model.Title' to the collection </p>
+<br />
+<a asp-controller="Home" asp-action="movieList">View Movie Collection</a>

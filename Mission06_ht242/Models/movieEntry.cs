@@ -11,18 +11,21 @@ namespace Mission06_ht242.Models
         [Key]
         [Required]
         public int EntryID { get; set; }
-        [Required]
-        public string Category { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Title is required")]
         public string Title { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Year is required")]
         public int Year { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Director is required")]
         public string Director { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Rating is required")]
         public string Rating { get; set; }
         public bool Edited { get; set; }
         public string LentTo { get; set; }
         public string Notes { get; set; }
+
+        //Build foreign key relationship
+        [Required]
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
     }
 }

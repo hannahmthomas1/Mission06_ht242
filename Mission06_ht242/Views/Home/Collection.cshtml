@@ -10,21 +10,31 @@
 
 <div>
     <!-- form for adding a movie -->
-    <form method="post">
+    <form method="post" >
+
+        <!--Div allows for form validation-->
+        <div asp-validation-summary="All"></div>
+
         <div>
-            <label asp-for="Category">Category:</label>
-            <input asp-for="Category"/>
+            <label asp-for="CategoryId">Category:</label>
+            <select asp-for="CategoryId">
+                <option value="">Select a Category</option>
+                @foreach (Category c in ViewBag.Categories)
+                {
+                    <option value="@c.CategoryId">@c.CategoryName</option>
+                }
+            </select>
         </div>
         <br />
 
         <div>
             <label asp-for="Title">Title:</label>
-            <input asp-for="Title"/>
+            <input asp-for="Title" />
         </div>
         <br />
 
         <div>
-            <label asp-for="Year" >Year:</label>
+            <label asp-for="Year">Year:</label>
             <input asp-for="Year" />
         </div>
         <br />
@@ -70,7 +80,6 @@
         <button type="submit">Submit</button>
 
     </form>
-    <div asp-validation-summary="All"></div>
     <br /><br />
 </div>
 
